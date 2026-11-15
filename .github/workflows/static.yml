@@ -42,11 +42,12 @@ jobs:
       - name: Stage public files only
         # Keep post sources (including drafts), tooling and config out of the deployed site.
         run: |
-          rsync -a \
-            --exclude='.git/' --exclude='.github/' --exclude='_site/' \
-            --exclude='posts/' --exclude='tools/' \
-            --exclude='.pages.yml' --exclude='.gitignore' --exclude='.gitkeep' \
-            ./ _site/
+          mkdir _site
+          tar -c \
+            --exclude=./.git --exclude=./.github --exclude=./_site \
+            --exclude=./posts --exclude=./tools \
+            --exclude=./.pages.yml --exclude=./.gitignore --exclude=.gitkeep \
+            . | tar -x -C _site
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
