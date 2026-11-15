@@ -29,6 +29,7 @@ const PROFILE = {
 
   `,
   socials: [
+    { label: "Writing", href: "/blog/" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/justuseaglesmith" },
     { label: "GitHub", href: "https://github.com/JustusEaglesmith20?tab=repositories" },
     { label: "Email", href: "mailto:justuseaglesmith@gmail.com" }
@@ -74,7 +75,7 @@ function About(){
           <ul>
             {PROFILE.socials.map(s => (
               <li key={s.label}>
-                <a href={s.href} target="_blank" rel="noreferrer">{s.label}</a>
+                <a href={s.href} target={s.href.startsWith("/") ? undefined : "_blank"} rel="noreferrer">{s.label}</a>
               </li>
             ))}
           </ul>
