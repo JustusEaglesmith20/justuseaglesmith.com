@@ -1,0 +1,43 @@
+# Pages CMS config (https://pagescms.org). Defines the "Posts" editor at app.pagescms.org.
+# Saving a post there commits a Markdown file to posts/, which triggers the deploy workflow.
+media:
+  input: assets/blog
+  output: /assets/blog
+  categories: [image]
+
+content:
+  - name: posts
+    label: Posts
+    type: collection
+    path: posts
+    format: yaml-frontmatter
+    filename: '{year}-{month}-{day}-{primary}.md'
+    exclude: [README.md]
+    view:
+      fields: [title, date, draft]
+      primary: title
+      sort: [date, title]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: date
+        label: Date
+        type: date
+        required: true
+      - name: summary
+        label: One-sentence summary (shown on the blog list)
+        type: text
+      - name: draft
+        label: Draft (on = saved but not published)
+        type: boolean
+        default: false
+      - name: body
+        label: Body
+        type: rich-text
+        options:
+          format: markdown

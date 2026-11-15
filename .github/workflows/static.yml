@@ -31,13 +31,30 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build blog pages from posts/
+        run: |
+          pip install "markdown>=3.5,<4" "pyyaml>=6,<7"
+          python tools/build_blog.py
+      - name: Stage public files only
+        # Keep post sources (including drafts), tooling and config out of the deployed site.
+        run: |
+          mkdir _site
+          tar -c \
+            --exclude=./.git --exclude=./.github --exclude=./_site \
+            --exclude=./posts --exclude=./tools \
+            --exclude=./.pages.yml --exclude=./.gitignore --exclude=.gitkeep \
+            . | tar -x -C _site
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          # Upload only the staged public files
+          path: '_site'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
